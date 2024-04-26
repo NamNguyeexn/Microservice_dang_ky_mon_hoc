@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="home.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <title>Đăng kí môn học</title>
+</head>
+<style>
+    .button {
+      margin: 20px;
+      width: 100px;
+      height: 50px;
+      background-color: brown;
+      border: 1px solid black;
+      border-radius: 5px;
+    }
+    :root {
+  --red: #ad171c;
+  --gray: #ccc;
+}
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+input {
+  outline: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+.subject-param {
+  cursor: pointer;
+  position: relative;
+}
+
+.subject-param[data-disabled] {
+  cursor: default;
+  background-color: #8a161a;
+  color: #ccc;
+}
+
+.subject-param i.fa {
+  margin-left: 8px;
+}
+
+#header {
+  background-color: var(--red);
+  color: #fff;
+  padding: 16px 60px;
+  box-shadow: rgba(0, 0, 0, 0.15) 0px 8px 16px 0px;
+}
+#header .title {
+  margin-left: 4px;
+}
+
+#main {
+  margin-top: 10px;
+  padding: 16px;
+}
+
+#main .title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #fff;
+  background-color: var(--red);
+  font-weight: lighter;
+  padding: 8px 30px;
+  text-transform: uppercase;
+}
+
+.filter-dropdown {
+  width: 100%;
+  max-width: 480px;
+  padding: 8px;
+  margin: 6px 0;
+  cursor: pointer;
+  outline: none;
+  border: 1px solid #aaa;
+  color: #333;
+  border-radius: 4px;
+}
+
+.filter-dropdown:disabled {
+  cursor: default;
+}
+
+.data-table-ctn {
+  position: relative;
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.data-table thead {
+  background-color: var(--red);
+  color: #fff;
+}
+
+.data-table thead th {
+  padding: 6px 0;
+}
+
+.data-table tbody td {
+  border: 1px solid var(--gray);
+  padding: 4px;
+}
+
+.data-table tbody td input[type='checkbox'] {
+  --size: 18px;
+  width: var(--size);
+  height: var(--size);
+  cursor: pointer;
+}
+
+.data-table tbody td input[type='checkbox']:disabled {
+  cursor: default;
+}
+
+.primary-button {
+  outline: none;
+  border-radius: 4px;
+  padding: 8px 4px;
+  color: #fff;
+  background-color: var(--red);
+  cursor: pointer;
+}
+
+.primary-button:disabled {
+  cursor: default;
+  color: var(--gray);
+  background-color: #943133;
+}
+
+.description {
+  padding: 6px;
+  background-color: #ecdcdc;
+}
+
+</style>
+
+<body>
+<header id='header'>
+    <i className='fa fa-home'></i>
+    <Link className='title' to='/'>
+    Trang chủ
+    </Link>
+</header>
+<!-- <div class='select-container'>
+  <h3 style="margin: 20px;">Tên môn học trong học kì </h3>
+  <select class='filter-dropdown'>
+    <option> --- Chọn tên môn học --- </option>
+
+    <option value='1'>Tùy chọn 1</option>
+    <option value='2'>Tùy chọn 2</option>
+    <option value='3'>Tùy chọn 3</option>
+  </select>
+</div> -->
+<div class='select-container'>
+    <h3 style="margin: 20px;">Tên môn học trong học kì </h3>
+    <select id="subject-dropdown" class='filter-dropdown'>
+        <option> --- Chọn tên môn học --- </option>
+    </select>
+</div>
+
+<div class='description'>
+    <h3>Danh sách môn học mở cho đăng ký</h3>
+</div>
+<div>
+    <input type="hidden" name="idStudent" value="1">
+    <div>
+        <label
+    </div>
+</div>
+
+</body>
+
+</html>
