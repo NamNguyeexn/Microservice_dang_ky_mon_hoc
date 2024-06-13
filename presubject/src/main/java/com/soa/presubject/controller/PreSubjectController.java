@@ -19,11 +19,11 @@ public class PreSubjectController {
         int idStudent = 1;
         if (preSubjectService.checkIfStudentPassed(idStudent, idSubject)) {
             return ResponseEntity.ok().body(
-                    new ResponseObject<>("PRESUBJECT PROCESS, Student passed this subject", true)
+                    new ResponseObject<>("Student passed previous subject ", true)
             );
         } else {
             return ResponseEntity.ok().body(
-                    new ResponseObject<>("PRESUBJECT PROCESS, Student didn't pass this subject", false)
+                    new ResponseObject<>("Student didn't pass previous subject ", false)
             );
         }
     }

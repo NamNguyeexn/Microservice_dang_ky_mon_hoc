@@ -17,15 +17,9 @@ public class SubjectController {
     private SubjectService subjectService;
     @GetMapping("/{id}")
     public ResponseEntity<ResponseObject<Subject>> getSubjectDetail(@PathVariable int id) {
-        if (subjectService.getSubjectById(id) == null) {
-            return ResponseEntity.ok().body(
-                    new ResponseObject<>("SUBJECT PROCESS, Null", null)
-            );
-        } else {
-            return ResponseEntity.ok().body(
-                    new ResponseObject<>("SUBJECT PROCESS, Ok", subjectService.getSubjectById(id))
-            );
-        }
+        return ResponseEntity.ok().body(
+                new ResponseObject<>("SUBJECT PROCESS, Ok", subjectService.getSubjectById(id))
+        );
     }
     @GetMapping("/getAll")
     public ResponseEntity<ResponseObject<List<Subject>>> getAllSubjectDetail(){

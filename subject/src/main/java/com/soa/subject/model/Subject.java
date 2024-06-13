@@ -2,11 +2,16 @@ package com.soa.subject.model;
 
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @Entity
 @Table(name = "subject")
+
+@NoArgsConstructor
+@AllArgsConstructor
 public class Subject {
     @Id
     @Column(name = "id", nullable = false)
@@ -18,4 +23,5 @@ public class Subject {
     @ManyToOne
     @JoinColumn(name = "idSemester")
     private Semester semester;
+
 }

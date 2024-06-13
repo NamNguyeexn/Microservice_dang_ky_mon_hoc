@@ -1,198 +1,129 @@
+//
+// Source code recreated from a .class file by IntelliJ IDEA
+// (powered by FernFlower decompiler)
+//
+
 package com.example.client.Controller;
 
-import com.example.client.DTO.*;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.ser.YearSerializer;
-import jakarta.servlet.Registration;
+import com.example.client.DTO.Classes;
+import com.example.client.DTO.ClassesDisplay;
+import com.example.client.DTO.Process;
+import com.example.client.DTO.Registration;
+import com.example.client.DTO.response.*;
+import com.example.client.service.ClientService;
 import jakarta.servlet.http.HttpSession;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.client.RestTemplate;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.StringTokenizer;
 
 @Controller
 public class ClientController {
     @Autowired
     private HttpSession session;
-    private String registrationControllerMessage;
-    private String classesControllerMessage;
-    private final RestTemplate restTemplate;
-    private String studentControllerMessage;
-    private String subjectControllerMessage;
-    private String presubjectControllerMessage;
     @Autowired
-    public ClientController(RestTemplate restTemplate) {
-        this.restTemplate = restTemplate;
+    private ClientService clientService;
+
+    public ClientController() {
     }
 
     @GetMapping
     public String getHomePage(Model model) throws IOException {
-        List<Classes> classes = getAllClasses();
-        List<ClassesDisplay> classesDisplays = new ArrayList<>();
-        for(Classes c : classes){
-            ClassesDisplay data = new ClassesDisplay();
-            data.setId(c.getId());
-            data.setIdClassString(c.getIdClassString());
-            data.setIdClassString(c.getIdClassString());
-            Subject s = getSubjectById(c.getId());
-            data.setNameSubject(s.getName());
-            data.setIntValuesSubject(s.getIntValues());
-            classesDisplays.add(data);
-        }
+        List<Classes> classes = clientService.getAllClasses();
+        List<ClassesDisplay> classesDisplays = clientService.getAllClassesDisplays(classes);
         model.addAttribute("classes", classesDisplays);
         return "home";
     }
-//    @PostMapping("/save")
-//    public String getAlert(@RequestParam("idClass") String[] idClassesStr, Model model) {
-//        String urlSaveRegistration = "http://localhost:8083/api/registration/save";
-//        //////
-//        for (String s: idClassesStr){
-//            System.out.println(s);
-//        }
-//        ResponseObject<Registration> responseObjectPreSubject = restTemplate.postForObject(
-//                urlSaveRegistration,
-//                Registration.class,
-//                idClassesStr);
-//        System.out.println(responseObjectPreSubject);
-//        if (classesControllerMessage!=null){
-//            model.addAttribute("classesMessage", classesControllerMessage);
-//        } else if (subjectControllerMessage!=null) {
-//            model.addAttribute("subjectMessage", subjectControllerMessage);
-//        }
-//        return "alert";
-//    }
-    private List<Classes> getAllClasses() throws IOException {
-        List<Classes> classesList = new ArrayList<>();
-        ObjectMapper mapper = new ObjectMapper();
-        RestTemplate restTemplate = new RestTemplate();
-        String externalServiceUrl = "http://localhost:8081/api/classes";
-        String responseEntity = restTemplate.getForObject(
-                externalServiceUrl,
-                String.class,
-                String.class
-        );
-        ResponseObject responseObjectClasses = mapper.readValue(responseEntity, ResponseObject.class);
-        classesControllerMessage = responseObjectClasses.getMessage();
-        List<Map<String,Object>> maps = parseToListOfMaps(responseEntity);
-        for(Map<String,Object> map : maps) {
-            Classes classes = new Classes();
-            classes.setId((int) map.get("id"));
-            classes.setIdClassString((String) map.get("idClassString"));
-            classes.setIdSubject((int) map.get("idSubject"));
-            classesList.add(classes);
+
+    @PostMapping({"/save"})
+    public String saveRegistration(@RequestParam("idClasses") String[] idClassesStr, Model model) {
+        List<Process> processes = new ArrayList();
+        List<Integer> idClasses = new ArrayList();
+        String[] var5 = idClassesStr;
+        int var6 = idClassesStr.length;
+
+        int idClass;
+        String res;
+        String name;
+        for(idClass = 0; idClass < var6; ++idClass) {
+            res = var5[idClass];
+            idClasses.add(Integer.parseInt(res));
+            System.out.println(res);
         }
-        return classesList;
+
+        List<Registration> registrations = new ArrayList();
+        Iterator var18 = idClasses.iterator();
+
+        while(var18.hasNext()) {
+            idClass = (Integer)var18.next();
+            res = "";
+            name = "Dang ky lop hoc phan cho sinh vien co ma sinh vien " + clientService.mapToGetStudentById(1).getIdStudentString() + " ";
+            int count = 0;
+            String classesControllerMessage = "CLASSES PROCESS ";
+            String presubjectControllerMessage = "PRESUBJECT PROCESS ";
+            String registrationControllerMessage = "REGISTRATION PROCESS ";
+            Process process = new Process();
+            WrapClassesStr wrapClassesStr = clientService.mapToGetClassesById(idClass);
+            Classes classes = wrapClassesStr.getClasses();
+            name += " cho lop hoc phan " + classes.getIdClassString() + " ";
+            classesControllerMessage += wrapClassesStr.getMessage();
+            res = res + classesControllerMessage + " \n ";
+            count += 1;
+            if (classes == null) {
+                create_process(count, res, name, process, processes);
+                System.out.println("END LINE = " + 74);
+                continue;
+            }
+            WrapBooleanStr wrapBooleanStr = clientService.mapToCheckIfStudentPassed(classes.getId());
+            System.out.println(wrapBooleanStr);
+            boolean presubject = wrapBooleanStr.isPresubject();
+            presubjectControllerMessage += wrapBooleanStr.getMessage();
+            res = res + presubjectControllerMessage + " \n ";
+            count += 1;
+            if (!presubject) {
+                create_process(count, res, name, process, processes);
+                System.out.println("END LINE = " + 82);
+            } else {
+                WrapRegistrationStr wrapRegistrationStr = clientService.mapToUpdateRegistration(classes);
+                Registration registration =wrapRegistrationStr.getRegistration();
+                get_classes(registration);
+                registrationControllerMessage += wrapRegistrationStr.getMessage();
+                res = res + registrationControllerMessage + " \n ";
+                count += 1;
+                create_process(count, res, name, process, processes);
+                System.out.println("END LINE = " + 89);
+                registrations.add(registration);
+            }
+        }
+        model.addAttribute("processes", processes);
+        return "alert";
     }
-    private Subject getSubjectById(int id) throws JsonProcessingException {
-        RestTemplate restTemplate = new RestTemplate();
-        ObjectMapper mapper = new ObjectMapper();
-        Subject resSubject = new Subject();
-        Semester resSemester = new Semester();
-        Year resYear = new Year();
-        String externalServiceUrl = "http://localhost:8085/api/subject/" + id;
-        String responseEntity = restTemplate.getForObject(
-                externalServiceUrl,
-                String.class,
-                id
-        );
-        ResponseObject responseObjectClasses = mapper.readValue(responseEntity, ResponseObject.class);
-        subjectControllerMessage = responseObjectClasses.getMessage();
-        String sol = responseObjectClasses
-                .getData()
-                .toString()
-                .replace(",", "")
-                .replace("=", " ");
-//        res = StringToSubject(responseObjectClasses.getData().toString());
-        String[] part = sol.split(" ");
-        List<String> resString = new ArrayList<>();
-        resSubject.setId(Integer.parseInt(part[1]));
-        resSubject.setName(part[3]);
-        resSubject.setIntValues(part[5]);
-        resSemester.setId(Integer.parseInt(part[8]));
-        resSemester.setName(part[10]);
-        resSemester.setIdSemesterString(part[12]);
-        resYear.setId(Integer.parseInt(part[15]));
-        resYear.setName(part[17]);
-        resSemester.setYear(resYear);
-        resSubject.setSemester(resSemester);
-        return resSubject;
+    private void create_process(int count, String message, String name, Process process, List<Process> processes){
+        System.out.println("/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/");
+        System.out.println("PROCESS END HERE");
+        System.out.println("COUNT = " + count);
+        System.out.println("MESSAGE = " + message);
+        System.out.println("/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/");
+        if (count == 1) {
+            process.setCount(33);
+        } else if (count == 2) {
+            process.setCount(67);
+        } else {
+            process.setCount(100);
+        }
+        process.setName(name);
+        process.setMessage(process.getMessage() + message);
+        processes.add(process);
     }
-    private List<Map<String,Object>> parseToListOfMaps(String json) throws IOException {
-        ObjectMapper mapper = new ObjectMapper();
-        Map<String,Object> rootMap = mapper.readValue(json, Map.class);
-        List<Map<String,Object>> dataList =
-                (List<Map<String,Object>>) rootMap.get("data");
-        return dataList;
+    private void get_classes(Registration registration) {
+        System.out.println("==============================");
+        System.out.println("ID CLASSES = " + registration.getIdClasses());
+        System.out.println("==============================");
     }
-//    private Subject StringToSubject(String s) {
-//        Subject subject = new Subject();
-//        StringTokenizer st = new StringTokenizer(s, ",");
-//        while(st.hasMoreTokens()) {
-//            String part = st.nextToken();
-//            String[] kv = part.split("=");
-//            String key = kv[0].trim();
-//            String value = kv[1];
-//            if(key.equals("id")) {
-//                subject.setId(Integer.parseInt(value));
-//            } else if(key.equals("name")) {
-//                subject.setName(value);
-//            } else if(key.equals("intValues")) {
-//                subject.setIntValues(value);
-//            } else if(key.equals("semester")) {
-//                Semester sem = parseSemester(value);
-//                subject.setSemester(sem);
-//            }
-//        }
-//        return subject;
-//    }
-//    private Semester parseSemester(String semStr) {
-//        Semester semester = new Semester();
-//        StringTokenizer st = new StringTokenizer(semStr, ",");
-//        while(st.hasMoreTokens()) {
-//            String part = st.nextToken();
-//            String[] kv = part.split("=");
-//            String key = kv[0].trim();
-//            String value = kv[1];
-//            System.out.println(key + " " + value);
-//            switch (key) {
-//                case "id" -> semester.setId(Integer.parseInt(value));
-//                case "name" -> semester.setName(value);
-//                case "idSemesterString" -> semester.setIdSemesterString(value);
-//                case "idYear" -> {
-//                    Year year = parseYear(value);
-//                    semester.setYear(year);
-//                }
-//            }
-//        }
-//        return semester;
-//    }
-//    private Year parseYear(String yearValue){
-//        Year year = new Year();
-//        StringTokenizer st = new StringTokenizer(yearValue, ",");
-//        while(st.hasMoreTokens()) {
-//            String part = st.nextToken();
-//            String[] kv = part.split("=");
-//            String key = kv[0].trim();
-//            String value = kv[1];
-//            if(key.equals("id")) {
-//                year.setId(Integer.parseInt(value));
-//            } else if(key.equals("name")) {
-//                year.setName(value);
-//            }
-//        }
-//        return year;
-//    }
 }

@@ -6,20 +6,22 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-
 @Service
 public class SubjectService {
     @Autowired
     private SubjectRepo subjectRepo;
+
     public Subject getSubjectById(int id) {
-        for (Subject subject : subjectRepo.findAll()) {
-            if (subject.getId() == id) {
-                return subject;
-            }
-        }
-        return null;
+        return subjectRepo.findById(id).orElse(null);
     }
+
     public List<Subject> getAllSubjects() {
         return subjectRepo.findAll();
     }
+
+    public Subject createSubject(Subject subject) {
+        return subjectRepo.save(subject);
+    }
+
 }
+

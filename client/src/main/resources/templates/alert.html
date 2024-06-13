@@ -6,7 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="home.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-    <title>Đăng kí môn học</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <title>Tiến trình</title>
 </head>
 <style>
     .button {
@@ -131,6 +132,11 @@ a:hover {
   height: var(--size);
   cursor: pointer;
 }
+.primary-button1:disabled {
+
+  color: var(--gray);
+  background-color: #943133;
+}
 
 .data-table tbody td input[type='checkbox']:disabled {
   cursor: default;
@@ -145,19 +151,21 @@ a:hover {
   cursor: pointer;
 }
 
+
+
 .primary-button:disabled {
   cursor: default;
   color: var(--gray);
   background-color: #943133;
 }
 
+
+
 .description {
   padding: 6px;
   background-color: #ecdcdc;
 }
-
 </style>
-
 <body>
 <header id='header'>
     <i className='fa fa-home'></i>
@@ -165,33 +173,35 @@ a:hover {
     Trang chủ
     </Link>
 </header>
-<!-- <div class='select-container'>
-  <h3 style="margin: 20px;">Tên môn học trong học kì </h3>
-  <select class='filter-dropdown'>
-    <option> --- Chọn tên môn học --- </option>
-
-    <option value='1'>Tùy chọn 1</option>
-    <option value='2'>Tùy chọn 2</option>
-    <option value='3'>Tùy chọn 3</option>
-  </select>
-</div> -->
-<div class='select-container'>
-    <h3 style="margin: 20px;">Tên môn học trong học kì </h3>
-    <select id="subject-dropdown" class='filter-dropdown'>
-        <option> --- Chọn tên môn học --- </option>
-    </select>
-</div>
-
 <div class='description'>
-    <h3>Danh sách môn học mở cho đăng ký</h3>
+    <p style="text-align: center;">Tiến trình service</p>
 </div>
-<div>
-    <input type="hidden" name="idStudent" value="1">
-    <div>
-        <label
+<div class='description' th:each="process: ${processes}">
+    <div class="process">
+        <div class="mb-3">
+            <strong>Tên :</strong>
+            <span th:text="${process.name}"></span>
+        </div>
+        <div class="progress" id="progressBar">
+            <div class="progress-bar" role="progressbar"
+                 width="{${process.count}}%"
+                 aria-valuenow="${process.count}" >
+            </div>
+        </div>
+        <div class="mb-3">
+            <strong>Thông báo :</strong>
+            <span th:text="${process.message}"></span>
+        </div>
+        <div class="mb-3">
+            <strong>Phần trăm thực hiện:</strong>
+            <span th:text="${process.count}"></span>
+        </div>
+
     </div>
 </div>
-
+<script>
+    const progressBar = document.querySelector('.progress-bar');
+    progressBar.setAttribute('aria-valuenow', progressBar.dataset.value);
+</script>
 </body>
-
 </html>

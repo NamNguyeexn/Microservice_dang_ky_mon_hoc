@@ -32,11 +32,11 @@ public class ClassesController {
     public ResponseEntity<ResponseObject<Classes>> updateClasses(@PathVariable int id, @RequestBody Classes classes) {
         if(classesService.getClassesById(id) == null) {
             return ResponseEntity.ok().body(
-                    new ResponseObject<>("CLASSES PROCESS, Cannot get classes!", null)
+                    new ResponseObject<>("Cannot get classes!", null)
             );
         } else {
             return ResponseEntity.ok().body(
-                    new ResponseObject<>("CLASSES PROCESS, Get classes success", classesService.updateClasses(classes))
+                    new ResponseObject<>("Get classes success", classesService.updateClasses(classes))
             );
         }
     }
@@ -44,11 +44,11 @@ public class ClassesController {
     public ResponseEntity<ResponseObject<Classes>> getClassById(@PathVariable int id) {
         if(classesService.getClassesById(id) == null) {
             return ResponseEntity.ok().body(
-                    new ResponseObject<>("CLASSES PROCESS, null!", null)
+                    new ResponseObject<>("null!", null)
             );
         } else {
             return ResponseEntity.ok().body(
-                    new ResponseObject<>("CLASSES PROCESS, ok!", classesService.getClassesById(id))
+                    new ResponseObject<>("ok!", classesService.getClassesById(id))
             );
         }
     }

@@ -131,6 +131,11 @@ a:hover {
   height: var(--size);
   cursor: pointer;
 }
+.primary-button1:disabled {
+
+  color: var(--gray);
+  background-color: #943133;
+}
 
 .data-table tbody td input[type='checkbox']:disabled {
   cursor: default;
@@ -145,11 +150,15 @@ a:hover {
   cursor: pointer;
 }
 
+
+
 .primary-button:disabled {
   cursor: default;
   color: var(--gray);
   background-color: #943133;
 }
+
+
 
 .description {
   padding: 6px;
@@ -165,27 +174,12 @@ a:hover {
     Trang chủ
     </Link>
 </header>
-<!-- <div class='select-container'>
-  <h3 style="margin: 20px;">Tên môn học trong học kì </h3>
-  <select class='filter-dropdown'>
-    <option> --- Chọn tên môn học --- </option>
 
-    <option value='1'>Tùy chọn 1</option>
-    <option value='2'>Tùy chọn 2</option>
-    <option value='3'>Tùy chọn 3</option>
-  </select>
-</div> -->
-<div class='select-container'>
-    <h3 style="margin: 20px;">Tên môn học trong học kì </h3>
-    <select id="subject-dropdown" class='filter-dropdown'>
-        <option> --- Chọn tên môn học --- </option>
-    </select>
-</div>
 
 <div class='description'>
     <h3>Danh sách môn học mở cho đăng ký</h3>
 </div>
-<form action="http://localhost:8083/api/registration/save" method="post">
+<form th:action="@{/save}" method="post">
     <input type="hidden" name="idStudent" value="1">
     <div class='data-table-ctn'>
         <table class='data-table'>
@@ -220,38 +214,7 @@ a:hover {
     </div>
     <button type="submit" class="button">Lưu đăng kí</button>
 </form>
-<div class='description'>
-    <h3>Danh sách môn học đã đăng ký</h3>
-</div>
-<div class='data-table-ctn'>
-    <table class='data-table'>
-        <thead>
-        <tr>
-            <th style='width: 32px;'></th>
-            <th class='subject-param-id'>Mã MH</th>
-            <th class='subject-param-name'>Tên môn học</th>
-            <th>Nhóm</th>
-            <th>Số TC</th>
-            <th></th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr class='outOfStock'>
-            <td style='width: 32px; padding: 0;'>
-                <label class='section-class-input-label'>
-                    <input type='checkbox' name='section-class-input' />
-                </label>
-            </td>
-            <td data-field='Mã môn học' style="text-align: center;">INT001</td>
-            <td data-field='Tên môn học'>Phát triển hướng dịch vụ</td>
-            <td data-field='Nhóm môn học' style="text-align: center;">03</td>
-            <td data-field='Số tín chỉ' style="text-align: center;">03</td>
-            <td data-field='' style="text-align: center;"><i class="fa-regular fa-trash-can"></i></td>
-        </tr>
 
-        </tbody>
-    </table>
-</div>
 
 
 </body>
